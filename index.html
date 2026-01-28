@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAC Onyx Edition</title>
+    <title>GAC Onyx Ayurveda</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
@@ -13,12 +13,14 @@
                 extend: {
                     fontFamily: { sans: ['Manrope', 'sans-serif'] },
                     animation: { 
-                        'blob': 'blob 10s infinite', 
+                        'float-slow': 'float 15s infinite ease-in-out',
+                        'float-medium': 'float 10s infinite ease-in-out reverse',
+                        'rotate-slow': 'spin 60s linear infinite',
                         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'shine': 'shine 2s infinite'
                     },
                     keyframes: {
-                        blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
+                        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
                         slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
                         shine: { '0%': { left: '-100%' }, '100%': { left: '200%' } }
                     },
@@ -32,38 +34,26 @@
         
         /* --- ONYX GLASS CSS --- */
         .glass-onyx {
-            /* Deep, dark base with high transparency */
             background: linear-gradient(160deg, rgba(255, 255, 255, 0.03) 0%, rgba(10, 10, 10, 0.6) 100%);
-            backdrop-filter: blur(50px) saturate(0%); /* Monochrome blur */
+            backdrop-filter: blur(50px) saturate(0%);
             -webkit-backdrop-filter: blur(50px) saturate(0%);
-            
-            /* Sharp, icy borders */
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.2); /* Top edge catches light */
-            border-left: 1px solid rgba(255, 255, 255, 0.15); 
-            
-            box-shadow: 
-                0 40px 80px -20px rgba(0, 0, 0, 0.9), /* Deep Black Shadow */
-                inset 0 0 0 1px rgba(255, 255, 255, 0.05); /* Inner rim */
-            
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
             border-radius: 32px;
         }
 
-        /* Inner inset sections */
         .glass-well {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.04);
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        /* MONOCHROME TACTILE BUTTON */
         .btn-white {
             background: linear-gradient(to bottom, #ffffff, #e5e5e5);
             color: black;
-            box-shadow: 
-                0 0 20px rgba(255, 255, 255, 0.1),
-                0 4px 0 #a3a3a3, /* Dark Grey Depth */
-                0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1), 0 4px 0 #a3a3a3, 0 10px 20px rgba(0,0,0,0.5);
             transition: all 0.1s;
         }
         .btn-white:active {
@@ -71,7 +61,6 @@
             box-shadow: 0 0 0 #a3a3a3, 0 0 0 rgba(0,0,0,0);
         }
 
-        /* Subtle Noise Texture for premium feel */
         .bg-noise {
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
@@ -79,9 +68,23 @@
 </head>
 <body class="flex items-center justify-center min-h-screen relative bg-black selection:bg-white selection:text-black">
 
-    <div class="fixed inset-0 z-0 pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-white rounded-full mix-blend-overlay filter blur-[150px] opacity-10 animate-blob"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-gray-600 rounded-full mix-blend-overlay filter blur-[150px] opacity-10 animate-blob animation-delay-2000"></div>
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        
+        <svg class="absolute top-[-5%] left-[-10%] w-[500px] h-[500px] text-white opacity-[0.03] animate-float-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+
+        <svg class="absolute bottom-[-20%] right-[-20%] w-[700px] h-[700px] text-gray-500 opacity-[0.04] animate-rotate-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.3" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            <circle cx="12" cy="12" r="10" stroke-width="0.2" stroke-dasharray="4 4"/>
+            <circle cx="12" cy="12" r="6" stroke-width="0.2"/>
+        </svg>
+
+        <svg class="absolute top-[40%] left-[-15%] w-[400px] h-[400px] text-gray-400 opacity-[0.03] animate-float-medium" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white rounded-full mix-blend-overlay filter blur-[120px] opacity-[0.07]"></div>
     </div>
 
     <div class="glass-onyx w-[90%] max-w-sm p-8 relative z-10 flex flex-col h-[680px] bg-noise">
@@ -123,7 +126,7 @@
             
             <div class="flex items-center justify-between mb-2 pl-1">
                  <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Schedule</p>
-                 <p class="text-[10px] text-gray-600 font-mono">28 JAN</p>
+                 <p class="text-[10px] text-gray-600 font-mono">TODAY</p>
             </div>
 
             <div class="relative z-10 group cursor-pointer animate-slide-up" style="animation-delay: 0ms;">
@@ -161,7 +164,6 @@
                     <p class="text-xs text-gray-600 mt-0.5">04:00 PM • Yoga Hall</p>
                 </div>
             </div>
-
         </div>
 
         <div class="pt-6 mt-auto">
