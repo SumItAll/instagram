@@ -1,262 +1,127 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAC Minimal UI</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAC Red Concept</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'] },
-                    colors: {
-                        bg: 'var(--bg)', surface: 'var(--surface)', txt: 'var(--txt)', sub: 'var(--sub)', border: 'var(--border)',
-                        accent: 'var(--accent)', success: '#10b981', error: '#ef4444', warning: '#f59e0b'
+                    fontFamily: { sans: ['Manrope', 'sans-serif'] },
+                    animation: { 'blob': 'blob 7s infinite', 'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' },
+                    keyframes: {
+                        blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
                     },
-                    animation: { 'fade-in': 'fadeIn 0.4s ease-out' },
-                    keyframes: { fadeIn: { '0%': { opacity: '0', transform: 'translateY(5px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
+                    colors: { brand: '#ef4444', darkbg: '#000000' } // Red Brand Color
                 }
             }
         }
     </script>
     <style>
-        /* --- SWISS MINIMALIST VARIABLES --- */
-        :root {
-            --bg: #ffffff; --surface: #ffffff; --txt: #111111; --sub: #737373; --border: #e5e5e5;
-            --accent: #111111; --accent-txt: #ffffff;
-        }
-        .dark {
-            --bg: #09090b; --surface: #09090b; --txt: #ffffff; --sub: #a1a1aa; --border: #27272a;
-            --accent: #ffffff; --accent-txt: #000000;
-        }
-
-        body { background-color: var(--bg); color: var(--txt); transition: background 0.3s, color 0.3s; }
+        body { background-color: #000000; color: #f8fafc; overflow: hidden; }
         
-        /* UI COMPONENTS */
-        .input-minimal {
-            background: transparent; border: 1px solid var(--border); color: var(--txt);
-            padding: 12px 16px; border-radius: 8px; width: 100%; outline: none; transition: 0.2s;
+        /* PREMIUM DARK GLASS EFFECT */
+        .glass-premium {
+            background: rgba(20, 20, 20, 0.6); /* Very dark base */
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 30px 60px -12px rgba(220, 38, 38, 0.15); /* Subtle Red Glow Shadow */
+            border-radius: 24px;
         }
-        .input-minimal:focus { border-color: var(--accent); }
 
-        .btn-primary {
-            background-color: var(--accent); color: var(--accent-txt); font-weight: 600;
-            padding: 14px; border-radius: 8px; width: 100%; transition: 0.2s;
+        /* 3D TACTILE RED BUTTON */
+        .btn-tactile {
+            background: linear-gradient(to bottom, #ef4444, #b91c1c); /* Red 500 to Red 700 */
+            box-shadow: 0 4px 0 #7f1d1d, 0 10px 15px -3px rgba(239, 68, 68, 0.4); /* Red 900 shadow */
+            transition: all 0.1s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
-        .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
-
-        .btn-outline {
-            background: transparent; border: 1px solid var(--border); color: var(--txt);
-            font-weight: 600; padding: 10px; border-radius: 8px; transition: 0.2s;
+        .btn-tactile:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #7f1d1d, 0 0 0 rgba(0,0,0,0);
         }
-        .btn-outline:hover { background: var(--border); }
-        .btn-outline.active { background: var(--accent); color: var(--accent-txt); border-color: var(--accent); }
-
-        .card { border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--surface); }
         
-        /* UTILS */
-        .hidden { display: none !important; }
-        #map { height: 180px; width: 100%; border-radius: 8px; filter: grayscale(100%); z-index: 0; }
-        ::-webkit-scrollbar { width: 0px; }
+        /* Custom Scrollbar for list if needed */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
-<body class="flex justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen relative bg-black">
 
-    <div class="fixed top-6 right-6 z-50 flex gap-2">
-        <button onclick="toggleTheme()" class="w-8 h-8 rounded-full border border-border flex items-center justify-center text-xs">◐</button>
-    </div>
-    
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
-        <span class="text-[10px] font-bold uppercase text-sub bg-bg p-1 rounded border border-border">Preview Mode</span>
-        <button onclick="showScreen('login')" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold shadow">Login</button>
-        <button onclick="showScreen('student')" class="bg-green-600 text-white px-3 py-1 rounded text-xs font-bold shadow">Student</button>
-        <button onclick="showScreen('teacher')" class="bg-orange-600 text-white px-3 py-1 rounded text-xs font-bold shadow">Teacher</button>
-        <button onclick="showScreen('admin')" class="bg-purple-600 text-white px-3 py-1 rounded text-xs font-bold shadow">Admin</button>
+    <div class="fixed inset-0 z-0">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-red-600 rounded-full mix-blend-screen filter blur-[80px] opacity-20 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-red-900 rounded-full mix-blend-screen filter blur-[80px] opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-rose-700 rounded-full mix-blend-screen filter blur-[80px] opacity-20 animate-blob animation-delay-4000"></div>
     </div>
 
-    <div class="w-full max-w-md p-6 flex flex-col h-screen overflow-hidden relative">
-
-        <div id="screen-login" class="screen flex-1 flex flex-col justify-center animate-fade-in">
-            <div class="mb-12">
-                <h1 class="text-4xl font-black tracking-tighter mb-2">GAC<br><span class="text-sub">PORTAL.</span></h1>
-                <div class="mt-4 inline-block border border-border px-3 py-1 rounded text-[10px] font-bold text-sub tracking-wider">
-                    🔒 SECURE DEVICE BINDING
-                </div>
+    <div class="glass-premium w-[90%] max-w-sm p-6 relative z-10 flex flex-col h-[600px]">
+        
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-white">GAC NGP</h1>
+                <p class="text-xs text-red-500 font-bold uppercase tracking-wider glow-text">Student Portal</p>
             </div>
-
-            <div class="flex mb-8 border-b border-border">
-                <button class="pb-2 mr-6 text-sm font-bold border-b-2 border-accent">Log In</button>
-                <button class="pb-2 text-sm font-bold text-sub">Register</button>
-            </div>
-
-            <div class="space-y-4">
-                <input type="email" placeholder="Email Address" class="input-minimal">
-                <input type="password" placeholder="Password" class="input-minimal">
-                <button onclick="showScreen('student')" class="btn-primary mt-4">AUTHENTICATE</button>
-            </div>
-            <p class="text-center text-xs text-sub mt-8">Authorized Faculty & Students Only</p>
-        </div>
-
-        <div id="screen-student" class="screen hidden flex-col h-full pt-4 animate-fade-in">
-            <div class="flex justify-between items-start mb-8">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight">Aditya Pastapure</h1>
-                    <p class="text-sub text-xs font-mono mt-1">ROLL: 2104 • BAMS II</p>
-                </div>
-                <button onclick="showScreen('login')" class="text-xs font-bold text-sub hover:text-error">EXIT</button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="card flex flex-col justify-between p-4 h-24">
-                    <span class="text-[10px] font-bold uppercase text-sub">GPS Range</span>
-                    <span class="text-2xl font-bold font-mono text-success">12m</span>
-                </div>
-                <div class="card flex flex-col justify-between p-4 h-24">
-                    <span class="text-[10px] font-bold uppercase text-sub">Status</span>
-                    <span class="text-xs font-bold text-success flex items-center gap-2"><span class="w-2 h-2 bg-success rounded-full"></span> LINKED</span>
-                </div>
-            </div>
-
-            <div class="flex border-b border-border mb-6">
-                <button class="flex-1 pb-2 text-xs font-bold border-b-2 border-accent">ATTENDANCE</button>
-                <button class="flex-1 pb-2 text-xs font-bold text-sub">HISTORY</button>
-            </div>
-
-            <div class="flex-1 flex flex-col justify-center text-center">
-                <div class="mb-8">
-                    <span class="animate-pulse inline-block w-3 h-3 bg-success rounded-full mb-3"></span>
-                    <h2 class="text-3xl font-bold tracking-tight mb-1">Dravyaguna</h2>
-                    <p class="text-sub text-xs uppercase tracking-widest">Session Active</p>
-                </div>
-                
-                <input type="text" value="8492" class="text-4xl font-mono text-center bg-transparent border-none outline-none w-full mb-8 tracking-[0.5em] font-bold" readonly>
-                
-                <button class="btn-primary py-4 text-sm uppercase tracking-wide">
-                    📸 Capture Identity
-                </button>
+            <div class="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center border border-white/10 shadow-inner">
+                <span class="text-gray-200">👤</span>
             </div>
         </div>
 
-        <div id="screen-teacher" class="screen hidden flex-col h-full pt-4 animate-fade-in">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h1 class="text-xl font-bold">Faculty</h1>
-                    <p class="text-xs text-sub uppercase tracking-wider">Dept. of Rachna Sharira</p>
-                </div>
-                <button onclick="showScreen('login')" class="text-xs font-bold text-sub">LOGOUT</button>
+        <div class="bg-neutral-900/50 rounded-2xl p-4 mb-6 border border-white/5 flex items-center justify-between shadow-lg">
+            <div>
+                <p class="text-gray-400 text-xs font-semibold uppercase">Attendance</p>
+                <p class="text-3xl font-bold text-white">82%</p>
             </div>
-
-            <div class="card mb-6">
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <div class="input-minimal text-xs flex items-center font-bold">2nd Year</div>
-                    <div class="input-minimal text-xs flex items-center font-bold">Theory</div>
-                </div>
-                <div class="input-minimal text-xs mb-3 flex items-center">Rachna Sharira (Anatomy)</div>
-                <button class="btn-primary text-xs uppercase">Initiate Session</button>
-            </div>
-
-            <div class="flex gap-4 border-b border-border mb-4">
-                <button class="pb-2 text-xs font-bold text-sub">LOGS</button>
-                <button class="pb-2 text-xs font-bold border-b-2 border-accent">ANALYTICS</button>
-            </div>
-
-            <div class="flex-1 flex flex-col overflow-hidden">
-                <div class="h-32 w-full mb-4 flex justify-center">
-                    <canvas id="demoChart"></canvas>
-                </div>
-                
-                <div class="flex-1 overflow-y-auto border border-border rounded-lg">
-                    <table class="w-full text-[10px] text-left">
-                        <thead class="bg-surface sticky top-0 border-b border-border z-10 text-sub">
-                            <tr><th class="p-2">ROLL</th><th class="p-2">NAME</th><th class="p-2 text-right">TOT%</th></tr>
-                        </thead>
-                        <tbody class="divide-y divide-border">
-                            <tr><td class="p-2 font-mono">2101</td><td class="p-2">Aarav Patel</td><td class="p-2 text-right font-bold text-success">82%</td></tr>
-                            <tr><td class="p-2 font-mono">2102</td><td class="p-2">Sneha Gupta</td><td class="p-2 text-right font-bold text-warning">68%</td></tr>
-                            <tr><td class="p-2 font-mono">2103</td><td class="p-2">Rohan Mehra</td><td class="p-2 text-right font-bold text-error">45%</td></tr>
-                            <tr><td class="p-2 font-mono">2104</td><td class="p-2">Aditya Pastapure</td><td class="p-2 text-right font-bold text-success">91%</td></tr>
-                            <tr><td class="p-2 font-mono">2105</td><td class="p-2">Priya Sharma</td><td class="p-2 text-right font-bold text-success">77%</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="h-10 w-10 rounded-full border-4 border-red-600 flex items-center justify-center text-[10px] font-bold text-red-100 bg-red-900/20">
+                A+
             </div>
         </div>
 
-        <div id="screen-admin" class="screen hidden flex-col h-full pt-4 animate-fade-in">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-xl font-bold tracking-tight">Admin Console</h1>
-                <button onclick="showScreen('login')" class="text-xs font-bold text-sub">LOGOUT</button>
-            </div>
+        <div class="flex-1 space-y-3">
+            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Today's Schedule</p>
             
-            <div class="flex gap-2 mb-6 border-b border-border pb-2">
-                <button class="text-xs font-bold px-3 py-1 rounded bg-border text-txt">STUDENTS</button>
-                <button class="text-xs font-bold px-3 py-1 rounded text-sub">GEOFENCE</button>
-                <button class="text-xs font-bold px-3 py-1 rounded text-sub">FACULTY</button>
-            </div>
-
-            <div class="card mb-4">
-                <div id="map"></div>
-                <div class="flex justify-between items-center mb-2 mt-4">
-                    <span class="text-xs font-bold uppercase text-sub">Radius Limit</span>
-                    <span class="text-sm font-mono font-bold">50m</span>
+            <div class="flex items-center p-3 rounded-xl bg-gradient-to-r from-red-900/20 to-transparent border border-red-500/30 hover:bg-white/5 transition cursor-pointer animate-slide-up" style="animation-delay: 0ms; opacity:0;">
+                <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center mr-3 text-lg border border-red-500/20">🌿</div>
+                <div>
+                    <h3 class="font-bold text-sm text-white">Dravyaguna</h3>
+                    <p class="text-xs text-red-300/70">10:00 AM • Hall A</p>
                 </div>
-                <input type="range" class="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer accent-black dark:accent-white">
+                <div class="ml-auto flex items-center gap-1">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold text-red-400 ml-1">LIVE</span>
+                </div>
             </div>
 
-            <button class="btn-primary uppercase text-xs">Save Configuration</button>
+            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 100ms; opacity:0;">
+                <div class="w-10 h-10 rounded-lg bg-neutral-800 text-gray-400 flex items-center justify-center mr-3 text-lg">🩺</div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-200">Rog Nidan</h3>
+                    <p class="text-xs text-gray-500">02:00 PM • Lab 3</p>
+                </div>
+            </div>
+
+            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 200ms; opacity:0;">
+                <div class="w-10 h-10 rounded-lg bg-neutral-800 text-gray-400 flex items-center justify-center mr-3 text-lg">🧘</div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-200">Swasthavritta</h3>
+                    <p class="text-xs text-gray-500">04:00 PM • Yoga Hall</p>
+                </div>
+            </div>
         </div>
+
+        <button class="w-full btn-tactile text-white font-bold py-4 rounded-xl mt-4 text-sm uppercase tracking-wide">
+            Mark Attendance
+        </button>
 
     </div>
 
-    <script>
-        // Theme Toggle
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-        }
-
-        // Screen Switcher
-        function showScreen(screenName) {
-            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
-            document.getElementById('screen-' + screenName).classList.remove('hidden');
-
-            // Initialize Map if Admin
-            if(screenName === 'admin') {
-                setTimeout(() => {
-                    if(!window.mapInit) {
-                        var map = L.map('map').setView([21.126222, 79.115222], 16);
-                        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-                        L.circle([21.126222, 79.115222], {color: '#333', fillColor: '#333', fillOpacity: 0.1, radius: 150}).addTo(map);
-                        window.mapInit = true;
-                    }
-                }, 100);
-            }
-
-            // Initialize Chart if Teacher
-            if(screenName === 'teacher') {
-                setTimeout(() => {
-                    if(!window.chartInit) {
-                        const ctx = document.getElementById('demoChart').getContext('2d');
-                        new Chart(ctx, {
-                            type: 'doughnut',
-                            data: {
-                                labels: ['Safe', 'Warning', 'Critical'],
-                                datasets: [{ data: [65, 20, 15], backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], borderWidth: 0 }]
-                            },
-                            options: { cutout: '85%', plugins: { legend: { display: false } } }
-                        });
-                        window.chartInit = true;
-                    }
-                }, 100);
-            }
-        }
-    </script>
 </body>
 </html>
