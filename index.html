@@ -1,26 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Login Demonstration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAC Premium Concept</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Manrope', 'sans-serif'] },
+                    animation: { 'blob': 'blob 7s infinite', 'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' },
+                    keyframes: {
+                        blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                    },
+                    colors: { brand: '#0d9488', darkbg: '#0f172a' } // Teal Brand Color
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
-        .login-container { border: 1px solid #ccc; padding: 20px; border-radius: 5px; width: 300px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background-color: #0095f6; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #0077c4; }
+        body { background-color: #0f172a; color: #f8fafc; overflow: hidden; }
+        
+        /* PREMIUM GLASS EFFECT */
+        .glass-premium {
+            background: rgba(30, 41, 59, 0.4); /* Darker, more transparent base */
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Top Highlight */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Deep Shadow */
+            border-radius: 24px;
+        }
+
+        /* 3D TACTILE BUTTON */
+        .btn-tactile {
+            background: linear-gradient(to bottom, #14b8a6, #0d9488);
+            box-shadow: 0 4px 0 #0f766e, 0 10px 15px -3px rgba(13, 148, 136, 0.4);
+            transition: all 0.1s;
+        }
+        .btn-tactile:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #0f766e, 0 0 0 rgba(0,0,0,0);
+        }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen relative">
 
-<div class="login-container">
-    <h2>Login</h2>
-    <form action="login_handler.php" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Log In</button>
-    </form>
-</div>
+    <div class="fixed inset-0 z-0">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <div class="glass-premium w-[90%] max-w-sm p-6 relative z-10 flex flex-col h-[600px]">
+        
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">GAC NGP</h1>
+                <p class="text-xs text-teal-400 font-bold uppercase tracking-wider">Student Portal</p>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
+                👤
+            </div>
+        </div>
+
+        <div class="bg-white/5 rounded-2xl p-4 mb-6 border border-white/5 flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-xs font-semibold uppercase">Attendance</p>
+                <p class="text-3xl font-bold text-white">82%</p>
+            </div>
+            <div class="h-10 w-10 rounded-full border-4 border-teal-500 flex items-center justify-center text-[10px] font-bold">
+                A+
+            </div>
+        </div>
+
+        <div class="flex-1 space-y-3">
+            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Today's Schedule</p>
+            
+            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 0ms; opacity:0;">
+                <div class="w-10 h-10 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center mr-3 text-lg">🌿</div>
+                <div>
+                    <h3 class="font-bold text-sm">Dravyaguna</h3>
+                    <p class="text-xs text-gray-400">10:00 AM • Hall A</p>
+                </div>
+                <div class="ml-auto text-xs font-bold text-teal-400 bg-teal-500/10 px-2 py-1 rounded">Active</div>
+            </div>
+
+            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 100ms; opacity:0;">
+                <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center mr-3 text-lg">🩺</div>
+                <div>
+                    <h3 class="font-bold text-sm">Rog Nidan</h3>
+                    <p class="text-xs text-gray-400">02:00 PM • Lab 3</p>
+                </div>
+            </div>
+
+            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 200ms; opacity:0;">
+                <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mr-3 text-lg">🧘</div>
+                <div>
+                    <h3 class="font-bold text-sm">Swasthavritta</h3>
+                    <p class="text-xs text-gray-400">04:00 PM • Yoga Hall</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="w-full btn-tactile text-white font-bold py-4 rounded-xl mt-4 text-sm uppercase tracking-wide">
+            Mark Attendance
+        </button>
+
+    </div>
 
 </body>
 </html>
