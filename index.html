@@ -3,153 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAC Premium Red</title>
+    <title>GAC Onyx Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Manrope', 'sans-serif'] },
-                    animation: { 'blob': 'blob 10s infinite', 'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards', 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' },
+                    animation: { 
+                        'blob': 'blob 10s infinite', 
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'shine': 'shine 2s infinite'
+                    },
                     keyframes: {
                         blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        shine: { '0%': { left: '-100%' }, '100%': { left: '200%' } }
                     },
-                    colors: { brand: '#ef4444', darkbg: '#000000' }
+                    colors: { brand: '#ffffff', darkbg: '#000000' }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #050505; color: #f8fafc; overflow: hidden; }
+        body { background-color: #000000; color: #f8fafc; overflow: hidden; }
         
-        /* --- ULTRA PREMIUM GLASS CSS --- */
-        .glass-premium {
-            /* Base Transparency & Blur */
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+        /* --- ONYX GLASS CSS --- */
+        .glass-onyx {
+            /* Deep, dark base with high transparency */
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.03) 0%, rgba(10, 10, 10, 0.6) 100%);
+            backdrop-filter: blur(50px) saturate(0%); /* Monochrome blur */
+            -webkit-backdrop-filter: blur(50px) saturate(0%);
             
-            /* Rim Lighting (Borders) */
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Catch light on top */
-            border-left: 1px solid rgba(255, 255, 255, 0.15); /* Catch light on left */
+            /* Sharp, icy borders */
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.2); /* Top edge catches light */
+            border-left: 1px solid rgba(255, 255, 255, 0.15); 
             
-            /* Depth & Shadow */
             box-shadow: 
-                inset 0 0 30px rgba(0,0,0,0.5), /* Inner darkness */
-                0 20px 40px -10px rgba(0, 0, 0, 0.8), /* Deep Drop Shadow */
-                0 0 80px -20px rgba(220, 38, 38, 0.15); /* Ambient Red Glow */
+                0 40px 80px -20px rgba(0, 0, 0, 0.9), /* Deep Black Shadow */
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05); /* Inner rim */
             
-            border-radius: 30px;
+            border-radius: 32px;
         }
 
-        /* Glass Cards inside the main container (Glass on Glass) */
-        .glass-inner {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        /* Inner inset sections */
+        .glass-well {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        /* 3D TACTILE BUTTON */
-        .btn-tactile {
-            background: linear-gradient(to bottom, #dc2626, #991b1b);
+        /* MONOCHROME TACTILE BUTTON */
+        .btn-white {
+            background: linear-gradient(to bottom, #ffffff, #e5e5e5);
+            color: black;
             box-shadow: 
-                0 2px 0 rgba(255,255,255,0.2) inset, /* Top Gloss */
-                0 4px 0 #7f1d1d, /* 3D Depth */
-                0 10px 20px -5px rgba(220, 38, 38, 0.5); /* Glow */
+                0 0 20px rgba(255, 255, 255, 0.1),
+                0 4px 0 #a3a3a3, /* Dark Grey Depth */
+                0 10px 20px rgba(0,0,0,0.5);
             transition: all 0.1s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
-        .btn-tactile:active {
+        .btn-white:active {
             transform: translateY(4px);
-            box-shadow: 0 0 0 #7f1d1d, 0 0 0 rgba(0,0,0,0);
+            box-shadow: 0 0 0 #a3a3a3, 0 0 0 rgba(0,0,0,0);
         }
 
-        /* Red Glow Text */
-        .glow-text {
-            text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        /* Subtle Noise Texture for premium feel */
+        .bg-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen relative bg-[#050505]">
+<body class="flex items-center justify-center min-h-screen relative bg-black selection:bg-white selection:text-black">
 
     <div class="fixed inset-0 z-0 pointer-events-none">
-        <div class="absolute top-[10%] left-[10%] w-96 h-96 bg-red-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob"></div>
-        <div class="absolute bottom-[20%] right-[10%] w-80 h-80 bg-rose-900 rounded-full mix-blend-screen filter blur-[90px] opacity-25 animate-blob animation-delay-2000"></div>
-        <div class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500 rounded-full mix-blend-overlay filter blur-[120px] opacity-10"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-white rounded-full mix-blend-overlay filter blur-[150px] opacity-10 animate-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-gray-600 rounded-full mix-blend-overlay filter blur-[150px] opacity-10 animate-blob animation-delay-2000"></div>
     </div>
 
-    <div class="glass-premium w-[90%] max-w-sm p-7 relative z-10 flex flex-col h-[650px]">
+    <div class="glass-onyx w-[90%] max-w-sm p-8 relative z-10 flex flex-col h-[680px] bg-noise">
         
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex justify-between items-center mb-10">
             <div>
-                <h1 class="text-3xl font-extrabold tracking-tight text-white drop-shadow-lg">GAC NGP</h1>
-                <p class="text-xs text-red-500 font-bold uppercase tracking-[0.2em] glow-text pl-0.5">Student Portal</p>
+                <h1 class="text-4xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400">GAC</h1>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em] mt-1">Student Portal</p>
             </div>
-            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center border border-white/10 shadow-lg backdrop-blur-sm">
-                <span class="text-lg opacity-80">👤</span>
-            </div>
-        </div>
-
-        <div class="glass-inner rounded-2xl p-5 mb-6 flex items-center justify-between">
-            <div>
-                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-1">Attendance</p>
-                <div class="flex items-baseline gap-1">
-                    <p class="text-4xl font-extrabold text-white tracking-tight">82</p>
-                    <p class="text-lg font-medium text-gray-500">%</p>
+            <div class="w-12 h-12 rounded-full bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center overflow-hidden">
+                    <span class="text-xl grayscale">👤</span>
                 </div>
             </div>
-            <div class="relative h-12 w-12 flex items-center justify-center">
-                <div class="absolute inset-0 rounded-full border-2 border-white/5"></div>
-                <div class="absolute inset-0 rounded-full border-t-2 border-r-2 border-red-500 rotate-45"></div>
-                <span class="text-xs font-bold text-red-100 drop-shadow-md">A+</span>
-            </div>
         </div>
 
-        <div class="flex-1 space-y-3 relative">
-            <div class="absolute left-4 top-8 bottom-4 w-px bg-white/5 z-0"></div> <p class="text-xs font-bold text-gray-500 uppercase mb-4 pl-1">Today's Schedule</p>
+        <div class="glass-well rounded-2xl p-6 mb-8 flex items-center justify-between relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-2xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
             
-            <div class="relative z-10 flex items-center p-3 rounded-2xl bg-gradient-to-r from-red-900/40 to-transparent border border-red-500/30 hover:bg-red-900/50 transition duration-300 cursor-pointer animate-slide-up group" style="animation-delay: 0ms; opacity:0;">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-red-500 to-red-800 text-white flex items-center justify-center mr-4 shadow-lg shadow-red-900/50 text-xl">
-                    🌿
+            <div class="relative z-10">
+                <p class="text-gray-500 text-[9px] font-black uppercase tracking-widest mb-1">Attendance</p>
+                <div class="flex items-start">
+                    <span class="text-5xl font-bold text-white tracking-tighter">82</span>
+                    <span class="text-sm font-medium text-gray-500 mt-1 ml-1">%</span>
                 </div>
-                <div>
-                    <h3 class="font-bold text-sm text-white group-hover:text-red-100 transition">Dravyaguna</h3>
-                    <p class="text-xs text-red-200/60 font-medium">10:00 AM • Hall A</p>
-                </div>
-                <div class="ml-auto flex flex-col items-end">
-                     <span class="text-[9px] font-black text-red-500 bg-red-950/80 px-2 py-0.5 rounded border border-red-500/20 animate-pulse-slow">NOW</span>
+            </div>
+            
+            <div class="relative h-14 w-14 flex items-center justify-center">
+                <svg class="transform -rotate-90 w-14 h-14">
+                    <circle cx="28" cy="28" r="26" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="transparent" />
+                    <circle cx="28" cy="28" r="26" stroke="white" stroke-width="4" fill="transparent" stroke-dasharray="163" stroke-dashoffset="30" stroke-linecap="round" />
+                </svg>
+                <span class="absolute text-xs font-bold text-white">A+</span>
+            </div>
+        </div>
+
+        <div class="flex-1 space-y-4 relative">
+            <div class="absolute left-[27px] top-2 bottom-4 w-px bg-gradient-to-b from-white/20 to-transparent z-0"></div>
+            
+            <div class="flex items-center justify-between mb-2 pl-1">
+                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Schedule</p>
+                 <p class="text-[10px] text-gray-600 font-mono">28 JAN</p>
+            </div>
+
+            <div class="relative z-10 group cursor-pointer animate-slide-up" style="animation-delay: 0ms;">
+                <div class="absolute inset-0 bg-white/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition duration-500"></div>
+                <div class="relative flex items-center p-4 rounded-2xl bg-gradient-to-r from-white/10 to-transparent border border-white/10 group-hover:border-white/20 transition">
+                    <div class="w-12 h-12 rounded-xl bg-white text-black flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(255,255,255,0.3)] text-xl z-20">
+                        🌿
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white">Dravyaguna</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">10:00 AM • Hall A</p>
+                    </div>
+                    <div class="ml-auto">
+                        <div class="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_white] animate-pulse"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="relative z-10 flex items-center p-3 rounded-2xl hover:bg-white/5 transition duration-200 cursor-pointer animate-slide-up group border border-transparent hover:border-white/5" style="animation-delay: 100ms; opacity:0;">
-                <div class="w-11 h-11 rounded-xl bg-white/5 text-gray-400 flex items-center justify-center mr-4 border border-white/5 group-hover:scale-105 transition">
+            <div class="relative z-10 flex items-center p-4 rounded-2xl hover:bg-white/5 transition border border-transparent hover:border-white/5 cursor-pointer animate-slide-up group" style="animation-delay: 100ms; opacity:0;">
+                <div class="w-12 h-12 rounded-xl bg-[#1a1a1a] text-gray-500 flex items-center justify-center mr-4 border border-white/5 group-hover:scale-95 transition">
                     🩺
                 </div>
-                <div class="opacity-60 group-hover:opacity-100 transition">
-                    <h3 class="font-bold text-sm text-gray-200">Rog Nidan</h3>
-                    <p class="text-xs text-gray-500">02:00 PM • Lab 3</p>
+                <div class="opacity-50 group-hover:opacity-100 transition">
+                    <h3 class="font-bold text-base text-gray-300">Rog Nidan</h3>
+                    <p class="text-xs text-gray-600 mt-0.5">02:00 PM • Lab 3</p>
                 </div>
             </div>
 
-            <div class="relative z-10 flex items-center p-3 rounded-2xl hover:bg-white/5 transition duration-200 cursor-pointer animate-slide-up group border border-transparent hover:border-white/5" style="animation-delay: 200ms; opacity:0;">
-                <div class="w-11 h-11 rounded-xl bg-white/5 text-gray-400 flex items-center justify-center mr-4 border border-white/5 group-hover:scale-105 transition">
+            <div class="relative z-10 flex items-center p-4 rounded-2xl hover:bg-white/5 transition border border-transparent hover:border-white/5 cursor-pointer animate-slide-up group" style="animation-delay: 200ms; opacity:0;">
+                <div class="w-12 h-12 rounded-xl bg-[#1a1a1a] text-gray-500 flex items-center justify-center mr-4 border border-white/5 group-hover:scale-95 transition">
                     🧘
                 </div>
-                <div class="opacity-60 group-hover:opacity-100 transition">
-                    <h3 class="font-bold text-sm text-gray-200">Swasthavritta</h3>
-                    <p class="text-xs text-gray-500">04:00 PM • Yoga Hall</p>
+                <div class="opacity-50 group-hover:opacity-100 transition">
+                    <h3 class="font-bold text-base text-gray-300">Swasthavritta</h3>
+                    <p class="text-xs text-gray-600 mt-0.5">04:00 PM • Yoga Hall</p>
                 </div>
             </div>
+
         </div>
 
-        <div class="pt-4">
-            <button class="w-full btn-tactile text-white font-extrabold py-4 rounded-xl text-sm uppercase tracking-widest relative overflow-hidden group">
+        <div class="pt-6 mt-auto">
+            <button class="w-full btn-white py-4 rounded-xl text-sm font-black uppercase tracking-widest relative overflow-hidden group">
                 <span class="relative z-10">Mark Attendance</span>
-                <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine"></div>
+                <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine"></div>
             </button>
         </div>
 
