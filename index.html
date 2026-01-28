@@ -1,117 +1,497 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAC Premium Concept</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GAC Minimal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Manrope', 'sans-serif'] },
-                    animation: { 'blob': 'blob 7s infinite', 'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' },
-                    keyframes: {
-                        blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'] },
+                    colors: {
+                        // MINIMALIST PALETTE
+                        bg: 'var(--bg)', 
+                        surface: 'var(--surface)', 
+                        txt: 'var(--txt)', 
+                        sub: 'var(--sub)', 
+                        border: 'var(--border)',
+                        
+                        // FUNCTIONAL COLORS (Desaturated)
+                        accent: 'var(--accent)', // Black/White
+                        success: '#10b981', // Emerald
+                        error: '#ef4444',   // Red
+                        warning: '#f59e0b'  // Amber
                     },
-                    colors: { brand: '#0d9488', darkbg: '#0f172a' } // Teal Brand Color
+                    animation: { 'fade-in': 'fadeIn 0.4s ease-out' },
+                    keyframes: { fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #0f172a; color: #f8fafc; overflow: hidden; }
-        
-        /* PREMIUM GLASS EFFECT */
-        .glass-premium {
-            background: rgba(30, 41, 59, 0.4); /* Darker, more transparent base */
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Top Highlight */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Deep Shadow */
-            border-radius: 24px;
+        /* --- THEME VARIABLES (SWISS STYLE) --- */
+        :root {
+            --bg: #ffffff;
+            --surface: #ffffff;
+            --txt: #111111;
+            --sub: #737373;
+            --border: #e5e5e5;
+            --accent: #111111; /* Black Button */
+            --accent-txt: #ffffff;
+        }
+        .dark {
+            --bg: #09090b; /* Zinc 950 */
+            --surface: #09090b;
+            --txt: #ffffff;
+            --sub: #a1a1aa;
+            --border: #27272a; /* Zinc 800 */
+            --accent: #ffffff; /* White Button */
+            --accent-txt: #000000;
         }
 
-        /* 3D TACTILE BUTTON */
-        .btn-tactile {
-            background: linear-gradient(to bottom, #14b8a6, #0d9488);
-            box-shadow: 0 4px 0 #0f766e, 0 10px 15px -3px rgba(13, 148, 136, 0.4);
-            transition: all 0.1s;
+        body { background-color: var(--bg); color: var(--txt); transition: background 0.3s, color 0.3s; }
+
+        /* MINIMALIST COMPONENTS */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px; /* Less rounded */
+            padding: 20px;
         }
-        .btn-tactile:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #0f766e, 0 0 0 rgba(0,0,0,0);
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--accent-txt);
+            font-weight: 600;
+            padding: 14px;
+            border-radius: 8px; /* Slightly sharp */
+            width: 100%;
+            transition: opacity 0.2s;
         }
+        .btn-primary:active { opacity: 0.8; transform: scale(0.99); }
+        .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--txt);
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .btn-outline:hover { background: var(--border); }
+        .btn-outline.active { background: var(--accent); color: var(--accent-txt); border-color: var(--accent); }
+
+        .input-minimal {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--txt);
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .input-minimal:focus { border-color: var(--accent); }
+
+        /* UTILS */
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tag-green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .tag-red { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        #toast-container { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; }
+        .toast { background: var(--accent); color: var(--accent-txt); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: fadeIn 0.3s; }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        .hidden { display: none !important; }
+        #map { height: 200px; width: 100%; border-radius: 8px; margin-bottom: 16px; z-index: 0; filter: grayscale(100%); } /* Grayscale Map */
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen relative">
+<body class="flex justify-center min-h-screen">
 
-    <div class="fixed inset-0 z-0">
-        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
-    </div>
+    <div id="toast-container"></div>
 
-    <div class="glass-premium w-[90%] max-w-sm p-6 relative z-10 flex flex-col h-[600px]">
+    <div class="w-full max-w-md p-6 flex flex-col h-screen overflow-hidden relative">
         
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">GAC NGP</h1>
-                <p class="text-xs text-teal-400 font-bold uppercase tracking-wider">Student Portal</p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-                👤
-            </div>
-        </div>
-
-        <div class="bg-white/5 rounded-2xl p-4 mb-6 border border-white/5 flex items-center justify-between">
-            <div>
-                <p class="text-gray-400 text-xs font-semibold uppercase">Attendance</p>
-                <p class="text-3xl font-bold text-white">82%</p>
-            </div>
-            <div class="h-10 w-10 rounded-full border-4 border-teal-500 flex items-center justify-center text-[10px] font-bold">
-                A+
-            </div>
-        </div>
-
-        <div class="flex-1 space-y-3">
-            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Today's Schedule</p>
-            
-            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 0ms; opacity:0;">
-                <div class="w-10 h-10 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center mr-3 text-lg">🌿</div>
-                <div>
-                    <h3 class="font-bold text-sm">Dravyaguna</h3>
-                    <p class="text-xs text-gray-400">10:00 AM • Hall A</p>
-                </div>
-                <div class="ml-auto text-xs font-bold text-teal-400 bg-teal-500/10 px-2 py-1 rounded">Active</div>
-            </div>
-
-            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 100ms; opacity:0;">
-                <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center mr-3 text-lg">🩺</div>
-                <div>
-                    <h3 class="font-bold text-sm">Rog Nidan</h3>
-                    <p class="text-xs text-gray-400">02:00 PM • Lab 3</p>
-                </div>
-            </div>
-
-            <div class="flex items-center p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer animate-slide-up" style="animation-delay: 200ms; opacity:0;">
-                <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mr-3 text-lg">🧘</div>
-                <div>
-                    <h3 class="font-bold text-sm">Swasthavritta</h3>
-                    <p class="text-xs text-gray-400">04:00 PM • Yoga Hall</p>
-                </div>
-            </div>
-        </div>
-
-        <button class="w-full btn-tactile text-white font-bold py-4 rounded-xl mt-4 text-sm uppercase tracking-wide">
-            Mark Attendance
+        <button onclick="toggleTheme()" class="absolute top-6 right-6 z-50 p-2 text-xl opacity-50 hover:opacity-100 transition">
+            <span id="theme-icon">◐</span>
         </button>
 
+        <div id="auth-screen" class="flex-1 flex flex-col justify-center animate-fade-in">
+            <div class="mb-12">
+                <h1 class="text-4xl font-black tracking-tighter mb-2">GAC<br><span class="text-sub">PORTAL.</span></h1>
+                <p class="text-sub text-sm font-medium mt-4">Authorized Access Only</p>
+                <div class="mt-4 inline-block border border-border px-3 py-1 rounded text-[10px] font-bold text-sub">
+                    SECURE DEVICE BINDING ACTIVE
+                </div>
+            </div>
+
+            <div class="flex mb-8 border-b border-border">
+                <button onclick="toggleAuth('login')" id="tab-login" class="pb-2 mr-6 text-sm font-bold border-b-2 border-accent transition-all">Log In</button>
+                <button onclick="toggleAuth('register')" id="tab-register" class="pb-2 text-sm font-bold text-sub border-b-2 border-transparent transition-all">Register</button>
+            </div>
+
+            <div id="form-login" class="space-y-4">
+                <input type="email" id="l-email" placeholder="Email" class="input-minimal">
+                <input type="password" id="l-password" placeholder="Password" class="input-minimal">
+                <button onclick="login()" id="loginBtn" class="btn-primary mt-4">AUTHENTICATE</button>
+            </div>
+
+            <div id="form-register" class="space-y-4 hidden">
+                <input type="text" id="r-name" placeholder="Full Name" class="input-minimal">
+                <div class="flex gap-3">
+                    <input type="number" id="r-roll" placeholder="Roll No" class="input-minimal w-2/3">
+                    <select id="r-year" class="input-minimal w-1/3 text-center font-bold">
+                        <option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option>
+                    </select>
+                </div>
+                <input type="email" id="r-email" placeholder="Email" class="input-minimal">
+                <input type="password" id="r-password" placeholder="Password" class="input-minimal">
+                <button onclick="register()" id="regBtn" class="btn-primary mt-4">CREATE ACCOUNT</button>
+            </div>
+        </div>
+
+        <div id="admin-dashboard" class="hidden flex-col h-full pt-4 animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-xl font-bold tracking-tight">Admin Console</h1>
+                <button onclick="logout()" class="text-xs font-bold text-sub hover:text-error">LOGOUT</button>
+            </div>
+            
+            <div class="flex gap-2 mb-6 border-b border-border pb-2 overflow-x-auto">
+                <button onclick="switchAdminTab('students')" id="ad-seg-students" class="text-xs font-bold px-3 py-1 rounded hover:bg-border transition active">STUDENTS</button>
+                <button onclick="switchAdminTab('geo')" id="ad-seg-geo" class="text-xs font-bold px-3 py-1 rounded hover:bg-border transition">GEOFENCE</button>
+                <button onclick="switchAdminTab('faculty')" id="ad-seg-faculty" class="text-xs font-bold px-3 py-1 rounded hover:bg-border transition">FACULTY</button>
+            </div>
+
+            <div id="ad-tab-students" class="flex-1 flex flex-col min-h-0">
+                <div class="flex gap-2 mb-4">
+                    <button onclick="loadStudentList('all')" class="flex-1 btn-outline py-2 text-xs">All</button>
+                    <button onclick="loadStudentList('1')" class="flex-1 btn-outline py-2 text-xs">1st</button>
+                    <button onclick="loadStudentList('2')" class="flex-1 btn-outline py-2 text-xs">2nd</button>
+                    <button onclick="loadStudentList('3')" class="flex-1 btn-outline py-2 text-xs">3rd</button>
+                </div>
+                <div class="flex-1 overflow-y-auto border border-border rounded-lg">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-surface sticky top-0 border-b border-border z-10"><tr class="text-sub"><th class="p-3 font-medium">ROLL</th><th class="p-3 font-medium">NAME</th><th class="p-3 text-right font-medium">ACTION</th></tr></thead>
+                        <tbody id="student-list-body" class="divide-y divide-border bg-surface"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ad-tab-geo" class="hidden flex-1 flex flex-col">
+                <div class="card mb-4">
+                    <div id="map"></div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold uppercase text-sub">Radius</span>
+                        <span id="radius-val" class="text-sm font-mono font-bold">50m</span>
+                    </div>
+                    <input type="range" id="radius-slider" min="20" max="500" class="w-full accent-black dark:accent-white h-1 bg-border rounded-lg appearance-none cursor-pointer" oninput="updateCircleRadius()">
+                </div>
+                <button onclick="saveGeoConfig()" class="btn-primary">SAVE CONFIGURATION</button>
+            </div>
+
+            <div id="ad-tab-faculty" class="hidden flex-1 flex flex-col">
+                <div class="card mb-4 space-y-3">
+                    <h3 class="text-xs font-bold uppercase text-sub">Add Faculty</h3>
+                    <input type="email" id="new-t-email" placeholder="Email" class="input-minimal text-sm">
+                    <select id="new-t-dept" class="input-minimal text-sm">
+                        <option value="">Select Department</option>
+                        <option>Rachna Sharira</option><option>Kriya Sharira</option><option>Samhita</option>
+                        <option>Dravyaguna</option><option>Rasashastra</option><option>Roga Nidan</option>
+                    </select>
+                    <button onclick="addFaculty()" class="btn-primary py-3 text-xs">AUTHORIZE</button>
+                </div>
+                <h3 class="text-xs font-bold uppercase text-sub mb-2">Authorized Staff</h3>
+                <div id="faculty-list" class="flex-1 overflow-y-auto space-y-2"></div>
+            </div>
+        </div>
+
+        <div id="student-dashboard" class="hidden flex-col h-full pt-4 animate-fade-in">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight" id="st-name">Student</h1>
+                    <p class="text-sub text-xs font-mono mt-1" id="st-roll">ROLL: --</p>
+                </div>
+                <button onclick="logout()" class="text-xs font-bold text-sub">EXIT</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="card flex flex-col justify-between p-4 h-24">
+                    <span class="text-[10px] font-bold uppercase text-sub">Distance</span>
+                    <span id="live-range" class="text-2xl font-bold font-mono">--m</span>
+                </div>
+                <div class="card flex flex-col justify-between p-4 h-24">
+                    <span class="text-[10px] font-bold uppercase text-sub">Status</span>
+                    <span class="text-xs font-bold text-success">CONNECTED</span>
+                </div>
+            </div>
+
+            <div class="flex border-b border-border mb-6">
+                <button onclick="switchStudentTab('active')" id="seg-st-active" class="flex-1 pb-2 text-xs font-bold border-b-2 border-accent transition">ATTENDANCE</button>
+                <button onclick="switchStudentTab('history')" id="seg-st-history" class="flex-1 pb-2 text-xs font-bold text-sub border-b-2 border-transparent transition">HISTORY</button>
+            </div>
+
+            <div id="st-view-active" class="flex-1 flex flex-col justify-center text-center relative">
+                <div id="active-class-ui" class="hidden w-full">
+                    <div class="mb-8">
+                        <span class="animate-pulse inline-block w-3 h-3 bg-success rounded-full mb-2"></span>
+                        <h2 class="text-3xl font-bold tracking-tight mb-2" id="session-subject">...</h2>
+                        <p class="text-sub text-xs uppercase">Session Active</p>
+                    </div>
+                    <input type="tel" id="pin-input" maxlength="4" placeholder="••••" class="text-4xl font-mono text-center bg-transparent border-b-2 border-border focus:border-accent outline-none w-32 mx-auto mb-8 tracking-[0.5em] pb-2 text-txt placeholder-sub">
+                    <button onclick="verifyAndMark()" id="markBtn" class="btn-primary py-4 text-sm">VERIFY LOCATION</button>
+                </div>
+
+                <div id="done-class-ui" class="hidden w-full">
+                    <h2 class="text-2xl font-bold mb-2">Marked.</h2>
+                    <p class="text-sub text-sm">Attendance recorded successfully.</p>
+                    <button onclick="checkSession()" class="mt-8 text-xs font-bold underline">Refresh</button>
+                </div>
+
+                <div id="no-class-ui" class="w-full opacity-50">
+                    <h2 class="text-lg font-medium mb-2">No Active Session</h2>
+                    <p class="text-xs text-sub">Waiting for teacher signal...</p>
+                    <button onclick="checkSession()" class="mt-4 text-xs font-bold">REFRESH</button>
+                </div>
+            </div>
+
+            <div id="st-view-history" class="hidden flex-1 overflow-y-auto">
+                <div id="st-history-list" class="space-y-0 divide-y divide-border">Loading...</div>
+            </div>
+        </div>
+
+        <div id="teacher-dashboard" class="hidden flex-col h-full pt-4 animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-xl font-bold">Faculty</h1>
+                    <p class="text-xs text-sub uppercase tracking-wider" id="t-dept">...</p>
+                </div>
+                <button onclick="logout()" class="text-xs font-bold text-sub hover:text-error">LOGOUT</button>
+            </div>
+
+            <div class="card mb-6 bg-surface">
+                <div id="create-ui">
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <select id="t-year" class="input-minimal text-xs" onchange="updateSubs()"><option value="">YEAR</option><option value="1">1ST</option><option value="2">2ND</option><option value="3">3RD</option></select>
+                        <select id="t-type" class="input-minimal text-xs"><option value="Theory">THEORY</option><option value="Practical">PRACTICAL</option></select>
+                    </div>
+                    <select id="t-sub" class="input-minimal text-xs mb-3 w-full"><option>Select Year First</option></select>
+                    <div class="flex gap-3">
+                        <select id="t-duration" class="input-minimal w-24 text-xs"><option value="60">60m</option><option value="5">5m</option></select>
+                        <button onclick="startClass()" class="btn-primary text-xs">INITIATE SESSION</button>
+                    </div>
+                </div>
+                <div id="active-ui" class="hidden text-center py-4">
+                    <p class="text-[10px] text-sub font-bold uppercase mb-2">SESSION PIN</p>
+                    <p id="pin-display" class="text-6xl font-mono font-bold tracking-tighter mb-6">----</p>
+                    <button onclick="endClass()" class="w-full btn-outline border-error text-error py-3 text-xs font-bold hover:bg-error hover:text-white">TERMINATE SESSION</button>
+                </div>
+            </div>
+
+            <div class="flex gap-4 border-b border-border mb-4">
+                <button onclick="switchTab('records')" id="seg-records" class="pb-2 text-xs font-bold border-b-2 border-accent transition">LOGS</button>
+                <button onclick="switchTab('analytics')" id="seg-analytics" class="pb-2 text-xs font-bold text-sub border-b-2 border-transparent transition">ANALYTICS</button>
+            </div>
+
+            <div id="view-records" class="flex-1 overflow-y-auto">
+                <div id="rec-list" class="space-y-2"></div>
+            </div>
+
+            <div id="view-analytics" class="hidden flex-1 flex flex-col">
+                <div class="h-32 w-32 mx-auto mb-4 relative">
+                    <canvas id="defaulterChart"></canvas>
+                </div>
+                <button onclick="calcAnalytics()" class="btn-outline w-full text-xs py-2 mb-4 font-bold">REFRESH DATA</button>
+                <div class="flex-1 overflow-y-auto border border-border rounded-lg">
+                    <table class="w-full text-[10px] text-left">
+                        <thead class="bg-surface sticky top-0 border-b border-border z-10 text-sub"><tr><th class="p-2">ROLL</th><th class="p-2">NAME</th><th class="p-2 text-right">TOT%</th></tr></thead>
+                        <tbody id="analytics-body" class="divide-y divide-border bg-surface"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="report-modal" class="fixed inset-0 bg-bg z-50 hidden flex flex-col animate-fade-in">
+            <div class="p-6 border-b border-border flex justify-between items-center">
+                <h3 class="font-bold text-lg">Attendance Log</h3>
+                <button onclick="document.getElementById('report-modal').classList.add('hidden')" class="text-2xl font-light">&times;</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <table class="w-full text-sm text-left"><tbody id="modal-body" class="divide-y divide-border"></tbody></table>
+            </div>
+        </div>
+
+        <div id="audit-modal" class="fixed inset-0 bg-bg z-[60] hidden flex flex-col animate-fade-in">
+            <div class="p-6 border-b border-border flex justify-between items-start">
+                <div><h2 class="text-xl font-bold" id="audit-name">Student</h2><p class="text-xs font-mono text-sub" id="audit-roll">--</p></div>
+                <button onclick="document.getElementById('audit-modal').classList.add('hidden')" class="text-2xl font-light">&times;</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6" id="audit-timeline"></div>
+        </div>
+
+        <div id="image-viewer" class="fixed inset-0 bg-bg z-[100] hidden flex items-center justify-center">
+            <button onclick="document.getElementById('image-viewer').classList.add('hidden')" class="absolute top-6 right-6 text-txt text-3xl">&times;</button>
+            <img id="full-image" src="" class="max-w-full max-h-full object-contain p-4 grayscale hover:grayscale-0 transition duration-500">
+        </div>
+
     </div>
 
+    <input type="file" id="cam" accept="image/*" capture="user" class="hidden" onchange="uploadPhoto()">
+    <canvas id="cvs" class="hidden"></canvas>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, deleteDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // CONFIG (Same as before)
+        const firebaseConfig = { apiKey: "AIzaSyBnv-g-85KNpSmYG0ZN_tfHLR4DsXpDttc", authDomain: "attendance-gac-ngp.firebaseapp.com", projectId: "attendance-gac-ngp", storageBucket: "attendance-gac-ngp.firebasestorage.app", messagingSenderId: "772470800474", appId: "1:772470800474:web:5bcf5808a57995a8991863" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+
+        // STATE
+        let userRole="", userName="", userRoll="", teacherDept="", rangeLimit=50, collegeLat=21.126222, collegeLng=79.115222;
+        let activeSessId=null, activePin=null, activeSubject="", analyticsData=[], chartInstance=null, mapInstance=null, mapCircle=null;
+
+        // THEME
+        window.toggleTheme = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
+        if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark');
+
+        window.showToast = (msg, type='info') => {
+            const d = document.createElement('div'); d.className = 'toast'; 
+            d.style.backgroundColor = type === 'error' ? 'var(--error)' : 'var(--accent)';
+            d.innerHTML = msg; document.getElementById('toast-container').appendChild(d);
+            setTimeout(() => { d.style.opacity='0'; setTimeout(()=>d.remove(), 300) }, 3000);
+        };
+        
+        window.viewFullImage = (src) => { document.getElementById('full-image').src = src; document.getElementById('image-viewer').classList.remove('hidden'); };
+
+        // DEVICE BINDING
+        function getDeviceId() { let d = localStorage.getItem('device_id'); if(!d) { d = crypto.randomUUID(); localStorage.setItem('device_id', d); } return d; }
+
+        // AUTH
+        window.toggleAuth = (m) => {
+            document.getElementById('form-login').classList.toggle('hidden', m!=='login'); document.getElementById('form-register').classList.toggle('hidden', m!=='register');
+            const tl = document.getElementById('tab-login'), tr = document.getElementById('tab-register');
+            if(m==='login') { tl.className='pb-2 mr-6 text-sm font-bold border-b-2 border-accent transition-all'; tr.className='pb-2 text-sm font-bold text-sub border-b-2 border-transparent transition-all'; }
+            else { tr.className='pb-2 text-sm font-bold border-b-2 border-accent transition-all'; tl.className='pb-2 mr-6 text-sm font-bold text-sub border-b-2 border-transparent transition-all'; }
+        };
+        window.login = async () => {
+            const btn = document.getElementById('loginBtn'); btn.innerText = "AUTHENTICATING...";
+            try {
+                const uc = await signInWithEmailAndPassword(auth, document.getElementById('l-email').value, document.getElementById('l-password').value);
+                const snap = await getDoc(doc(db, "users", uc.user.uid));
+                if(snap.exists()) {
+                    const d = snap.data();
+                    if(d.banned) throw new Error("ACCESS DENIED: BANNED");
+                    if(d.role === 'student') {
+                        const cid = getDeviceId();
+                        if(d.registered_device_id && d.registered_device_id !== cid) { await signOut(auth); throw new Error("DEVICE MISMATCH"); }
+                        if(!d.registered_device_id) await updateDoc(doc(db, "users", uc.user.uid), { registered_device_id: cid });
+                    }
+                }
+            } catch(e) { showToast(e.message, 'error'); await signOut(auth); btn.innerText = "AUTHENTICATE"; }
+        };
+        window.register = async () => {
+            const n=document.getElementById('r-name').value, r=document.getElementById('r-roll').value, e=document.getElementById('r-email').value, p=document.getElementById('r-password').value;
+            try {
+                const uc = await createUserWithEmailAndPassword(auth, e, p);
+                const fac = await getDoc(doc(db, "faculty_whitelist", e));
+                await setDoc(doc(db, "users", uc.user.uid), { name: n, roll: r, email: e, role: fac.exists()?"teacher":"student", department: fac.exists()?fac.data().dept:null, createdAt: new Date(), registered_device_id: getDeviceId() });
+                location.reload();
+            } catch(e) { showToast(e.message, 'error'); }
+        };
+        window.logout = () => signOut(auth).then(()=>location.reload());
+
+        onAuthStateChanged(auth, async (u) => {
+            if(u) {
+                const snap = await getDoc(doc(db, "users", u.uid)); if(!snap.exists()) return;
+                const d = snap.data(); userRole = d.role; userName = d.name; userRoll = d.roll||""; teacherDept = d.department;
+                const conf = await getDoc(doc(db, "settings", "config")); if(conf.exists()) { rangeLimit = conf.data().allowedRange||50; collegeLat = conf.data().lat||21.126222; collegeLng=conf.data().lng||79.115222; }
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById(userRole+'-dashboard').classList.remove('hidden'); document.getElementById(userRole+'-dashboard').classList.add('flex');
+                if(userRole==='student') { document.getElementById('st-name').innerText = userName; document.getElementById('st-roll').innerText = "ROLL: "+userRoll; checkSession(); startGPS(); }
+                if(userRole==='teacher') { document.getElementById('t-dept').innerText = teacherDept||"STAFF"; loadRecords(); checkTeacherSession(); }
+                if(userRole==='admin') { loadStudentList('all'); }
+            }
+        });
+
+        // ADMIN LOGIC
+        window.switchAdminTab = (t) => { ['students','geo','faculty'].forEach(x => { document.getElementById(`ad-tab-${x}`).classList.add('hidden'); document.getElementById(`ad-seg-${x}`).classList.remove('bg-border'); }); document.getElementById(`ad-tab-${t}`).classList.remove('hidden'); document.getElementById(`ad-seg-${t}`).classList.add('bg-border'); if(t==='geo') initMap(); if(t==='faculty') loadFacultyList(); };
+        window.loadStudentList = async (f) => {
+            const b = document.getElementById('student-list-body'); b.innerHTML = "<tr><td class='p-3'>Loading...</td></tr>";
+            let q = query(collection(db, "users"), where("role","==","student")); if(f!=='all') q = query(collection(db, "users"), where("role","==","student"), where("year","==",f));
+            const s = await getDocs(q); b.innerHTML = "";
+            s.forEach(d => { const u = d.data(); b.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-white/5"><td class="p-3 font-mono">${u.roll}</td><td class="p-3 font-medium">${u.name}</td><td class="p-3 text-right"><button onclick="resetDevice('${d.id}')" class="text-xs border border-border px-2 py-1 rounded">RESET ID</button></td></tr>`; });
+        };
+        window.resetDevice = async (uid) => { if(confirm("Unbind Device?")) { await updateDoc(doc(db,"users",uid), {registered_device_id: deleteField()}); showToast("Unbound"); } };
+        window.initMap = () => {
+            if(mapInstance) return; setTimeout(() => {
+                mapInstance = L.map('map').setView([collegeLat, collegeLng], 17);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(mapInstance); // Minimal Map Style
+                L.marker([collegeLat, collegeLng], {draggable:true}).addTo(mapInstance).on('dragend',e=>{ const l=e.target.getLatLng(); collegeLat=l.lat; collegeLng=l.lng; mapCircle.setLatLng(l); });
+                mapCircle = L.circle([collegeLat, collegeLng], {color:'#111',fillColor:'#111',fillOpacity:0.1,radius:rangeLimit}).addTo(mapInstance);
+                document.getElementById('radius-slider').value = rangeLimit;
+            }, 500);
+        };
+        window.updateCircleRadius = () => { rangeLimit = parseInt(document.getElementById('radius-slider').value); document.getElementById('radius-val').innerText = rangeLimit+"m"; if(mapCircle) mapCircle.setRadius(rangeLimit); };
+        window.saveGeoConfig = async () => { await setDoc(doc(db,"settings","config"),{allowedRange:rangeLimit,lat:collegeLat,lng:collegeLng},{merge:true}); showToast("SAVED"); };
+        window.loadFacultyList = async () => { const l = document.getElementById('faculty-list'); l.innerHTML="Loading..."; const q=query(collection(db,"users"),where("role","==","teacher")); const s=await getDocs(q); l.innerHTML=""; s.forEach(d=>{ l.innerHTML+=`<div class="p-3 border border-border rounded flex justify-between"><span class="text-sm font-bold">${d.data().name}</span><span class="tag bg-border">${d.data().department}</span></div>`; }); };
+        window.addFaculty = async () => { const e=document.getElementById('new-t-email').value, d=document.getElementById('new-t-dept').value; if(e&&d) { await setDoc(doc(db,"faculty_whitelist",e),{dept:d}); showToast("AUTHORIZED"); } };
+
+        // TEACHER LOGIC
+        window.calcAnalytics = async () => {
+            const btn=document.querySelector("button[onclick='calcAnalytics()']"); btn.innerText="PROCESSING...";
+            const sessQ = query(collection(db, "sessions"), where("tid", "==", auth.currentUser.uid)); const sessSnap = await getDocs(sessQ);
+            const mySessIds = sessSnap.docs.map(d=>d.id); const total = mySessIds.length || 1;
+            const subQ = query(collection(db, "submissions")); const subSnap = await getDocs(subQ);
+            const counts = {}; subSnap.forEach(d => { if(mySessIds.includes(d.data().sessId)) { const s = d.data().sid; counts[s] = (counts[s]||0)+1; } });
+            // Render Table
+            const tbody = document.getElementById('analytics-body'); tbody.innerHTML = "";
+            Object.keys(counts).forEach(async uid => {
+                const uSnap = await getDoc(doc(db,"users",uid)); if(!uSnap.exists()) return;
+                const u = uSnap.data(); const pct = Math.round((counts[uid]/total)*100);
+                const color = pct<65 ? 'text-error' : (pct<75 ? 'text-warning' : 'text-success');
+                tbody.innerHTML += `<tr class="border-b border-border hover:bg-surface cursor-pointer" onclick="showAudit('${uid}')"><td class="p-2 font-mono">${u.roll}</td><td class="p-2 truncate max-w-[100px]">${u.name}</td><td class="p-2 text-right font-bold ${color}">${pct}%</td></tr>`;
+            });
+            // Chart
+            const ctx = document.getElementById('defaulterChart').getContext('2d'); if(chartInstance) chartInstance.destroy();
+            let safe=0, warn=0, crit=0; Object.values(counts).forEach(c => { const p=(c/total)*100; if(p>=75)safe++; else if(p>=65)warn++; else crit++; });
+            chartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: ['Safe','Warn','Crit'], datasets: [{ data: [safe,warn,crit], backgroundColor: ['#10b981','#f59e0b','#ef4444'], borderWidth: 0 }] }, options: { cutout: '80%', plugins: { legend: { display: false } } } });
+            btn.innerText="REFRESH DATA";
+        };
+        window.showAudit = async (uid) => {
+            document.getElementById('audit-modal').classList.remove('hidden'); const t = document.getElementById('audit-timeline'); t.innerHTML = "Fetching...";
+            const q = query(collection(db, "submissions"), where("sid", "==", uid)); const s = await getDocs(q);
+            const u = await getDoc(doc(db,"users",uid)); document.getElementById('audit-name').innerText = u.data().name; document.getElementById('audit-roll').innerText = u.data().roll;
+            t.innerHTML = ""; s.forEach(d => { const r = d.data(); t.innerHTML += `<div class="flex gap-4 mb-4 border-l-2 border-border pl-4"><img src="${r.photo}" class="w-10 h-10 object-cover bg-border" onclick="viewFullImage('${r.photo}')"><div><p class="font-bold text-xs">${r.subName}</p><p class="text-[10px] text-sub">${r.time.toDate().toLocaleString()}</p></div></div>`; });
+        };
+        const subs = { "1": ["Rachna Sharira", "Kriya Sharira", "Samhita-I", "Padarth Vigyan", "Sanskrit"], "2": ["Agad Tantra", "Swasthavritta", "Dravyaguna", "Rog Nidana", "Samhita-II", "Rasashastra"], "3": ["Kayachikitsa", "Panchakarma", "Shalya Tantra", "Shalakya Tantra"] };
+        window.updateSubs = () => { const y=document.getElementById('t-year').value, s=document.getElementById('t-sub'); s.innerHTML=""; (subs[y]||[]).forEach(i=>s.innerHTML+=`<option>${i}</option>`); };
+        window.startClass = async () => { const sub=document.getElementById('t-sub').value, d=document.getElementById('t-duration').value; if(!sub) return; const pin=Math.floor(1000+Math.random()*9000).toString(); const r = await addDoc(collection(db,"sessions"), {tid:auth.currentUser.uid, sub:sub, start:new Date(), end:new Date(Date.now()+d*60000), active:true, pin:pin}); activeSessId=r.id; checkTeacherSession(); };
+        window.endClass = async () => { await updateDoc(doc(db,"sessions",activeSessId), {active:false, end:new Date()}); location.reload(); };
+        async function checkTeacherSession() { const q=query(collection(db,"sessions"),where("tid","==",auth.currentUser.uid),where("active","==",true)); const s=await getDocs(q); s.forEach(d=>{ if(d.data().end.toDate()>new Date()) { activeSessId=d.id; document.getElementById('create-ui').classList.add('hidden'); document.getElementById('active-ui').classList.remove('hidden'); document.getElementById('pin-display').innerText=d.data().pin; } }); }
+        window.loadRecords = async () => { const l=document.getElementById('rec-list'); l.innerHTML=""; const q=query(collection(db,"sessions"),where("tid","==",auth.currentUser.uid)); const s=await getDocs(q); s.forEach(d=>{ l.innerHTML+=`<div class="p-3 border border-border rounded flex justify-between hover:bg-surface cursor-pointer" onclick="showReport('${d.id}')"><span class="font-bold text-xs">${d.data().sub}</span><span class="text-[10px] text-sub">${d.data().start.toDate().toLocaleDateString()}</span></div>`; }); };
+        window.showReport = async (sid) => { document.getElementById('report-modal').classList.remove('hidden'); const b=document.getElementById('modal-body'); b.innerHTML="Loading..."; const q=query(collection(db,"submissions"),where("sessId","==",sid)); const s=await getDocs(q); b.innerHTML=""; s.forEach(d=>{ const r=d.data(); b.innerHTML+=`<tr class="border-b border-border"><td class="p-2 font-mono">${r.roll}</td><td class="p-2">${r.name}</td><td class="p-2 text-right text-[10px] text-sub">${r.time.toDate().toLocaleTimeString()}</td></tr>`; }); };
+        window.switchTab = (t) => { document.getElementById('view-records').classList.toggle('hidden', t!=='records'); document.getElementById('view-analytics').classList.toggle('hidden', t!=='analytics'); const sr=document.getElementById('seg-records'), sa=document.getElementById('seg-analytics'); if(t==='records'){sr.classList.add('border-accent');sa.classList.remove('border-accent');}else{sa.classList.add('border-accent');sr.classList.remove('border-accent');} };
+
+        // STUDENT LOGIC
+        function startGPS() { navigator.geolocation.watchPosition(p=>{ const d=getDist(p.coords.latitude, p.coords.longitude); document.getElementById('live-range').innerText=Math.round(d)+"m"; document.getElementById('live-range').className = d<rangeLimit ? "text-2xl font-bold font-mono text-success" : "text-2xl font-bold font-mono text-error"; }, null, {enableHighAccuracy:true}); }
+        window.checkSession = async () => { const q=query(collection(db,"sessions"),where("active","==",true)); const s=await getDocs(q); let found=false; for(const d of s.docs) { if(d.data().end.toDate()>new Date()) { found=true; activeSessId=d.id; activePin=d.data().pin; activeSubject=d.data().sub; const subQ=query(collection(db,"submissions"),where("sessId","==",d.id),where("sid","==",auth.currentUser.uid)); const subS=await getDocs(subQ); document.getElementById('active-class-ui').classList.toggle('hidden', !subS.empty); document.getElementById('done-class-ui').classList.toggle('hidden', subS.empty); document.getElementById('no-class-ui').classList.add('hidden'); document.getElementById('session-subject').innerText=activeSubject; break; } } if(!found) { document.getElementById('active-class-ui').classList.add('hidden'); document.getElementById('done-class-ui').classList.add('hidden'); document.getElementById('no-class-ui').classList.remove('hidden'); } };
+        window.verifyAndMark = () => { const b=document.getElementById('markBtn'); if(b.innerText.includes("Selfie")) { document.getElementById('cam').click(); return; } if(document.getElementById('pin-input').value!==activePin) return showToast("INVALID PIN", 'error'); b.innerText="LOCATING..."; b.disabled=true; navigator.geolocation.getCurrentPosition(p=>{ const d=getDist(p.coords.latitude, p.coords.longitude); if(d>rangeLimit) { b.innerText="VERIFY LOCATION"; b.disabled=false; return showToast("OUT OF RANGE", 'error'); } b.innerText="CAPTURE IDENTITY"; b.disabled=false; }); };
+        window.uploadPhoto = () => { const f=document.getElementById('cam').files[0]; if(!f) return; const r=new FileReader(); r.readAsDataURL(f); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.getElementById('cvs'),x=c.getContext('2d'); const s=300/i.width; c.width=300; c.height=i.height*s; x.drawImage(i,0,0,300,c.height); submit(c.toDataURL('image/jpeg',0.5)); }; }; };
+        async function submit(b64) { await addDoc(collection(db,"submissions"), {sid:auth.currentUser.uid, name:userName, roll:userRoll, sessId:activeSessId, subName:activeSubject, photo:b64, time:new Date()}); showToast("VERIFIED", 'success'); setTimeout(()=>location.reload(),1500); }
+        window.switchStudentTab = (t) => { document.getElementById('st-view-active').classList.toggle('hidden',t!=='active'); document.getElementById('st-view-history').classList.toggle('hidden',t!=='history'); const sa=document.getElementById('seg-st-active'), sh=document.getElementById('seg-st-history'); if(t==='active'){sa.classList.add('border-accent');sh.classList.remove('border-accent');}else{sh.classList.add('border-accent');sa.classList.remove('border-accent');loadStudentHistory();} };
+        window.loadStudentHistory = async () => { const l=document.getElementById('st-history-list'); l.innerHTML="Loading..."; const q=query(collection(db,"submissions"),where("sid","==",auth.currentUser.uid)); const s=await getDocs(q); l.innerHTML=""; s.forEach(d=>{ const r=d.data(); l.innerHTML+=`<div class="p-3 flex justify-between"><span class="font-bold text-xs">${r.subName}</span><span class="text-[10px] text-sub">${r.time.toDate().toLocaleDateString()}</span></div>`; }); };
+        function getDist(lat1, lon1) { const R=6371e3, φ1=lat1*Math.PI/180, φ2=collegeLat*Math.PI/180, Δφ=(collegeLat-lat1)*Math.PI/180, Δλ=(collegeLng-lon1)*Math.PI/180; const a=Math.sin(Δφ/2)*Math.sin(Δφ/2)+Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)*Math.sin(Δλ/2); return R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); }
+    </script>
 </body>
 </html>
